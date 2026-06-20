@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Name — Oficiální stránka</title>
+
+    <!-- ========== FAVIKONA ========== -->
+    <!-- TODO: Nahraď cestou k vlastní favikoně -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- ========== FONTY ========== -->
+    <!-- TODO: Můžeš vyměnit za jiné Google Fonty -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- ========== IKONY ========== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ========== CSS PROMĚNNÉ ========== */
+        /* TODO: Uprav barvy podle identity hry */
+        :root {
+            --bg: #0a0a0f;
+            --bg-secondary: #12121c;
+            --fg: #e8e8f0;
+            --muted: #6b6b80;
+            --accent: #00ffaa;
+            --accent-dim: #00cc88;
+            --accent-glow: rgba(0, 255, 170, 0.3);
+            --card: rgba(18, 18, 28, 0.85);
+            --border: rgba(255, 255, 255, 0.06);
+            --danger: #ff4466;
+            --font-display: 'Orbitron', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+        }
+
+        /* ========== RESET & BASE ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ========== POZADÍ — ČÁSTICE ========== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ========== NAVIGACE ========== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: color 0.25s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--fg);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+        }
+
+        /* Glowing orb na pozadí hero */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            animation: pulse-glow 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.7; transform: translateX(-50%) scale(1.15); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 170, 0.08);
+            border: 1px solid rgba(0, 255, 170, 0.2);
+            border-radius: 999px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: fade-in-up 0.8s ease-out both;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fade-in-up 0.8s 0.15s ease-out both;
+        }
+
+        .hero-title .accent {
+            color: var(--accent);
+            text-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .hero-subtitle {
+            max-width: 600px;
+            font-size: 1.15rem;
+            color: var(--muted);
+            font-weight: 300;
+            margin-bottom: 3rem;
+            animation: fade-in-up 0.8s 0.3s ease-out both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fade-in-up 0.8s 0.45s ease-out both;
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== TLAČÍTKA ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 24px var(--accent-glow), 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dim);
+            box-shadow: 0 0 40px var(--accent-glow), 0 6px 24px rgba(0,0,0,0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* ========== SEKCE — OBECNÉ ========== */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem;
+        }
+
+        .section-label {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            max-width: 600px;
+            color: var(--muted);
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+
+        /* ========== O HŘE ========== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/10;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* TODO: Nahraď placeholder obrázkem ze hry */
+        .about-image .placeholder-img {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-secondary), #1a1a2e);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .about-text p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .about-text p strong {
+            color: var(--fg);
+            font-weight: 600;
+        }
+
+        /* ========== INFO KARTY ========== */
+        .features-section {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(0, 255, 170, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: rgba(0, 255, 170, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.6rem;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        /* ========== SCREENSHOTY ========== */
+        .screenshots-section {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .screenshot-item {
+            border-radius: 10px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .screenshot-item:hover {
+            border-color: rgba(0, 255, 170, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        /* TODO: Nahraď placeholder screenshoty obrázky ze hry */
+        .screenshot-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--bg-secondary), #16162a);
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .screenshot-placeholder i {
+            font-size: 2rem;
+            opacity: 0.4;
+        }
+
+        /* ========== SYSTÉMOVÉ POŽADAVKY ========== */
+        .requirements-section {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .req-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .req-card h3 {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .req-card h3 .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .req-card.minimal h3 .dot { background: var(--accent); }
+        .req-card.recommended h3 .dot { background: #ffaa00; }
+
+        .req-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .req-row:last-child {
+            border-bottom: none;
+        }
+
+        .req-row .label {
+            color: var(--muted);
+        }
+
+        .req-row .value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* ========== DOWNLOAD SEKCE ========== */
+        .download-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            filter: blur(100px);
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .download-section .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .download-section .section-desc {
+            margin: 0 auto 2.5rem;
+            text-align: center;
+        }
+
+        .download-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .download-meta-item {
+            text-align: center;
+        }
+
+        .download-meta-item .val {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: var(--accent);
+        }
+
+        .download-meta-item .lbl {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ========== PLATFORMY ========== */
+        .platforms {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .platform-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            font-size: 0.9rem;
+            transition: color 0.25s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-copy {
+            color: var(--muted);
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-socials a {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            transition: all 0.25s;
+        }
+
+        .footer-socials a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* ========== SCROLL REVEAL ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 8px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--fg);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ========== TOAST ========== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+            color: var(--fg);
+            z-index: 300;
+            backdrop-filter: blur(12px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .req-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .screenshots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 1.2rem;
+            }
+        }
+
+        /* ========== REDUCED MOTION ========== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== ČÁSTICOVÉ POZADÍ ========== -->
+    <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+    <!-- ========== LIGHTBOX PRO SCREENSHOTY ========== -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-label="Zvětšený screenshot">
+        <button class="lightbox-close" aria-label="Zavřít"><i class="fas fa-times"></i></button>
+        <img src="" alt="Zvětšený screenshot" id="lightbox-img">
+    </div>
+
+    <!-- ========== TOAST NOTIFIKACE ========== -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ========== NAVIGACE ========== -->
+    <nav role="navigation" aria-label="Hlavní navigace">
+        <a href="#" class="nav-logo">Type Name</a>
+        <ul class="nav-links">
+            <!-- TODO: Přidej nebo uprav odkazy podle potřeby -->
+            <li><a href="#about">O hre</a></li>
+            <li><a href="#features">Funkce</a></li>
+            <li><a href="#screenshots">Screeny</a></li>
+            <li><a href="#requirements">Pozadavky</a></li>
+            <li><a href="#download">Stahnout</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <header class="hero" id="hero">
+        <!-- TODO: Změň badge text (např. "Nová aktualizace v1.2", "Připravujeme", "Early Access"...) -->
+        <div class="hero-badge">
+            <i class="fas fa-bolt"></i>
+            <!-- PRÁZDNÁ KOLONKA: Text badge -->
+            <span>Coming Soon</span>
+        </div>
+
+        <h1 class="hero-title">
+            <!-- PRÁZDNÁ KOLONKA: Hlavní nadpis (pokud se má lišit od "Type Name") -->
+            <span class="accent">Type</span> Name
+        </h1>
+
+        <!-- PRÁZDNÁ KOLONKA: Podtitulek hry -->
+        <p class="hero-subtitle">
+            Strihačka s unikatnim hernim systemem. Prozkoumej svet plny nebezpeci a objev tajemstvi, ktera meni vsechno.
+        </p>
+
+        <div class="hero-actions">
+            <!-- TODO: Nahraď URL stránkou stažení (Steam, Itch.io, vlastní server...) -->
+            <a href="#download" class="btn btn-primary" id="hero-download-btn">
+                <i class="fas fa-download"></i> Stahnout hru
+            </a>
+            <!-- TODO: Nahraď URL trailerem na YouTube -->
+            <a href="#" class="btn btn-secondary" id="trailer-btn">
+                <i class="fas fa-play"></i> Trailer
+            </a>
+        </div>
+    </header>
+
+    <!-- ========== O HŘE ========== -->
+    <section id="about">
+        <div class="about-grid">
+            <div class="about-image reveal">
+                <!-- TODO: Nahraď obrázkem ze hry (screenshot, key art...) -->
+                <div class="placeholder-img">
+                    <i class="fas fa-image" style="font-size:3rem;opacity:0.3;"></i>
+                    <span>Zde bude hlavni obrazek hry</span>
+                </div>
+            </div>
+            <div class="about-text reveal">
+                <p class="section-label">O hre</p>
+                <h2 class="section-title">Pribeh typu Name</h2>
+                <!-- PRÁZDNÁ KOLONKA: Dlouhý popis hry — nahraď vlastním textem -->
+                <p>
+                    <strong>Type Name</strong> je <!-- PRÁZDNÁ KOLONKA: žánr --> akni dobrodruzna hra,
+                    ktera te zve do <!-- PRÁZDNÁ KOLONKA: název světa/lokace --> temneho sveta plneho
+                    neznamych tvori a skrytych historii. Kazde rozhodnuti ovlivni smer pribehu.
+                </p>
+                <p>
+                    <!-- PRÁZDNÁ KOLONKA: Další popis — mechaniky, inspirace, cíl hry -->
+                    Vytvor si vlastni styl hraní pomoci rozsahleho systemu schopnosti a objev
+                    vice nez <!-- PRÁZDNÁ KOLONKA: počet --> 50 unikatnych lokaci.
+                </p>
+                <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1rem;">
+                    <!-- PRÁZDNÉ KOLONKY: Tagy/žánry -->
+                    <span class="platform-tag"><i class="fas fa-gamepad"></i> Akce</span>
+                    <span class="platform-tag"><i class="fas fa-compass"></i> Dobrodrustvi</span>
+                    <span class="platform-tag"><i class="fas fa-book"></i> RPG</span>
+                    <!-- TODO: Přidej další tagy podle potřeby -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FUNKCE / FEATURES ========== -->
+    <section id="features">
+        <div class="features-section">
+            <p class="section-label reveal">Funkce</p>
+            <h2 class="section-title reveal">Co te ceka</h2>
+            <p class="section-desc reveal">
+                <!-- PRÁZDNÁ KOLONKA: Úvodní text do sekce funkcí -->
+                Hra prinasi radu unikatnich mechanik a obsahu, ktere ji odlisuji od ostatnich.
+            </p>
+
+            <div class="features-grid">
+                <!-- ========== FEATURE KARTA 1 ========== -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <!-- PRÁZDNÉ KOLONKY: Název a popis feature -->
+                    <h3>Dynamicke bojove systemy</h3>
+                    <p>Realtime souboje s kombi a reakcnimi mechanikami. Kazdy boj je unikatni.</p>
+                </div>
+
+                <!-- ========== FEATURE KARTA 2 ========== -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <h3>Otevreny svet</h3>
+                    <p>Volne se pohybuj po rozsahle mape plne tajnych mist a skrytych odmen.</p>
+                </div>
+
+                <!-- ========== FEATURE KARTA 3 ========== -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-code-branch"></i></div>
+                    <h3>Vicenasobne konce</h3>
+                    <p>Tvoje volby maji vahu. Pribeh ma vice zakonceni podle tvych rozhodnuti.</p>
+                </div>
+
+                <!-- ========== FEATURE KARTA 4 ========== -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3>Co-op multiplayer</h3>
+                    <p>Hraj s prateli v online co-op modu pro az 4 hrace na jedne mape.</p>
+                </div>
+
+                <!-- ========== FEATURE KARTA 5 ========== -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <h3>Arsenal schopnosti</h3>
+                    <p>Odemkni desitky magickych a technickych schopnosti a vytvor si vlastni build.</p>
+                </div>
+
+                <!-- ========== FEATURE KARTA 6 ========== -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-music"></i></div>
+                    <h3>Originalni soundtrack</h3>
+                    <p>Imersivni hudba slozena primo pro Type Name, ktera dotvari atmosferu.</p>
+                </div>
+
+                <!-- TODO: Pridej dalsi feature karty podle potreby -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SCREENSHOTY ========== -->
+    <section id="screenshots">
+        <div class="screenshots-section">
+            <p class="section-label reveal">Galerie</p>
+            <h2 class="section-title reveal">Screenshoty</h2>
+            <p class="section-desc reveal">
+                <!-- PRÁZDNÁ KOLONKA: Popisek galerie -->
+                Nahled ze hry — click pro zvetiseni.
+            </p>
+
+            <div class="screenshots-grid">
+                <!-- TODO: Nahraď každý screenshot-item obrázkem ze hry -->
+                <!-- Příklad s obrázkem:
+                <div class="screenshot-item reveal" data-src="screenshots/screen1.jpg">
+                    <img src="screenshots/screen1.jpg" alt="Screenshot 1" loading="lazy">
+                </div>
+                -->
+                <div class="screenshot-item reveal" data-src="">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Screenshot 1</span>
+                    </div>
+                </div>
+                <div class="screenshot-item reveal" data-src="">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Screenshot 2</span>
+                    </div>
+                </div>
+                <div class="screenshot-item reveal" data-src="">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Screenshot 3</span>
+                    </div>
+                </div>
+                <div class="screenshot-item reveal" data-src="">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Screenshot 4</span>
+                    </div>
+                </div>
+                <div class="screenshot-item reveal" data-src="">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Screenshot 5</span>
+                    </div>
+                </div>
+                <div class="screenshot-item reveal" data-src="">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>Screenshot 6</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SYSTÉMOVÉ POŽADAVKY ========== -->
+    <section id="requirements">
+        <div class="requirements-section">
+            <p class="section-label reveal">Technicke udaje</p>
+            <h2 class="section-title reveal">Systemove pozadavky</h2>
+            <p class="section-desc reveal">
+                <!-- PRÁZDNÁ KOLONKA: Popisek k požadavkům -->
+                Ujisti se, ze tvuj pocitac splnuje minimalni pozadavky pro plynuly zazitek.
+            </p>
+
+            <div class="req-grid">
+                <!-- ========== MINIMÁLNÍ ========== -->
+                <div class="req-card minimal reveal">
+                    <h3><span class="dot"></span> Minimalni</h3>
+                    <div class="req-row">
+                        <span class="label">OS</span>
+                        <!-- PRÁZDNÁ KOLONKA: Minimální OS -->
+                        <span class="value">Windows 10 64-bit</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Procesor</span>
+                        <!-- PRÁZDNÁ KOLONKA: Minimální CPU -->
+                        <span class="value">Intel i5-8400 / AMD Ryzen 5 2600</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Pamet</span>
+                        <!-- PRÁZDNÁ KOLONKA: Minimální RAM -->
+                        <span class="value">8 GB RAM</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Grafika</span>
+                        <!-- PRÁZDNÁ KOLONKA: Minimální GPU -->
+                        <span class="value">NVIDIA GTX 1060 6GB / AMD RX 580</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Disk</span>
+                        <!-- PRÁZDNÁ KOLONKA: Minimální velikost -->
+                        <span class="value">30 GB volneho mista</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">DirectX</span>
+                        <span class="value">Verze 12</span>
+                    </div>
+                </div>
+
+                <!-- ========== DOPORUČENÉ ========== -->
+                <div class="req-card recommended reveal">
+                    <h3><span class="dot"></span> Doporucene</h3>
+                    <div class="req-row">
+                        <span class="label">OS</span>
+                        <!-- PRÁZDNÁ KOLONKA: Doporučený OS -->
+                        <span class="value">Windows 11 64-bit</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Procesor</span>
+                        <!-- PRÁZDNÁ KOLONKA: Doporučený CPU -->
+                        <span class="value">Intel i7-12700 / AMD Ryzen 7 5800X</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Pamet</span>
+                        <!-- PRÁZDNÁ KOLONKA: Doporučená RAM -->
+                        <span class="value">16 GB RAM</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Grafika</span>
+                        <!-- PRÁZDNÁ KOLONKA: Doporučená GPU -->
+                        <span class="value">NVIDIA RTX 3070 / AMD RX 6800 XT</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">Disk</span>
+                        <!-- PRÁZDNÁ KOLONKA: Doporučená velikost / SSD -->
+                        <span class="value">30 GB SSD</span>
+                    </div>
+                    <div class="req-row">
+                        <span class="label">DirectX</span>
+                        <span class="value">Verze 12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== DOWNLOAD ========== -->
+    <section id="download" class="download-section">
+        <p class="section-label reveal">Pripraven</p>
+        <h2 class="section-title reveal">Stahnout Type Name</h2>
+        <p class="section-desc reveal">
+            <!-- PRÁZDNÁ KOLONKA: Text před download tlačítkem -->
+            Klikni na tlacitko a presmerujeme te na stranku se stahovanim.
+        </p>
+
+        <div class="download-meta reveal">
+            <!-- PRÁZDNÉ KOLONKY: Meta údaje o hře -->
+            <div class="download-meta-item">
+                <div class="val">v0.1.0</div>
+                <div class="lbl">Verze</div>
+            </div>
+            <div class="download-meta-item">
+                <div class="val">~2.4 GB</div>
+                <div class="lbl">Velikost</div>
+            </div>
+            <div class="download-meta-item">
+                <div class="val">Free</div>
+                <div class="lbl">Cena</div>
+            </div>
+        </div>
+
+        <!-- TODO: Nahraď href="#" skutečnou URL adresou stažení -->
+        <a href="#" class="btn btn-primary" id="download-btn" style="font-size:1.1rem;padding:1.1rem 3rem;">
+            <i class="fas fa-download"></i> Stahnout nyni
+        </a>
+
+        <div class="platforms reveal">
+            <!-- TODO: Uprav platformy podle toho, kde hra běží -->
+            <span class="platform-tag"><i class="fab fa-windows"></i> Windows</span>
+            <span class="platform-tag"><i class="fab fa-linux"></i> Linux</span>
+            <!-- <span class="platform-tag"><i class="fab fa-apple"></i> macOS</span> -->
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <!-- TODO: Nahraď # skutečnými odkazy -->
+        <div class="footer-socials">
+            <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            <a href="#" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="Steam"><i class="fab fa-steam"></i></a>
+            <!-- TODO: Pridej dalsi socialni site -->
+        </div>
+        <div class="footer-links">
+            <!-- TODO: Nahraď # skutečnými odkazy -->
+            <a href="#">Ochrana soukromi</a>
+            <a href="#">Podminky pouziti</a>
+            <a href="#">Kontaktujte nas</a>
+            <a href="#">Tiskove materialy</a>
+        </div>
+        <!-- PRÁZDNÁ KOLONKA: Jméno tvůrce / studia -->
+        <p class="footer-copy">&copy; 2025 Type Name Studio. Vsechna prava vyhrazena.</p>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // =============================================
+        // TODO: Uprav podle potřeby — toto je základní
+        //       interaktivita stránky
+        // =============================================
+
+        /* ---------- ČÁSTICE NA POZADÍ ---------- */
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouse = { x: -999, y: -999 };
+            const PARTICLE_COUNT = 80;
+            const CONNECT_DIST = 140;
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Sledování myši pro interaktivní částice
+            document.addEventListener('mousemove', function(e) {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+
+            // Vytvoření částic
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * 1.5 + 0.5,
+                    alpha: Math.random() * 0.4 + 0.1
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+
+                    // Pohyb
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Odrážění od okrajů
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    // Reakce na myš — mírné odpuzování
+                    const dx = p.x - mouse.x;
+                    const dy = p.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150 && dist > 0) {
+                        const force = (150 - dist) / 150 * 0.02;
+                        p.vx += (dx / dist) * force;
+                        p.vy += (dy / dist) * force;
+                    }
+
+                    // Omezení rychlosti
+                    const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                    if (speed > 1) {
+                        p.vx *= 0.98;
+                        p.vy *= 0.98;
+                    }
+
+                    // Vykreslení částice
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, Math.max(0.1, p.r), 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 255, 170, ' + p.alpha + ')';
+                    ctx.fill();
+
+                    // Spojení blízkých částic čárami
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const ddx = p.x - p2.x;
+                        const ddy = p.y - p2.y;
+                        const d = Math.sqrt(ddx * ddx + ddy * ddy);
+                        if (d < CONNECT_DIST) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            const lineAlpha = (1 - d / CONNECT_DIST) * 0.12;
+                            ctx.strokeStyle = 'rgba(0, 255, 170, ' + lineAlpha + ')';
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        /* ---------- SCROLL REVEAL ---------- */
+        (function() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        // Rozdělení zpoždění podle pořadí v rodiči
+                        const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+                        let index = 0;
+                        siblings.forEach(function(s, i) {
+                            if (s === entry.target) index = i;
+                        });
+                        entry.target.style.transitionDelay = (index * 0.08) + 's';
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(function(el) {
+                observer.observe(el);
+            });
+        })();
+
+        /* ---------- LIGHTBOX PRO SCREENSHOTY ---------- */
+        (function() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const closeBtn = lightbox.querySelector('.lightbox-close');
+            const items = document.querySelectorAll('.screenshot-item[data-src]');
+
+            items.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    const src = item.getAttribute('data-src');
+                    if (!src) {
+                        showToast('Screenshot jeste neni dostupny.');
+                        return;
+                    }
+                    lightboxImg.src = src;
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+                lightboxImg.src = '';
+            }
+
+            closeBtn.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) closeLightbox();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeLightbox();
+            });
+        })();
+
+        /* ---------- DOWNLOAD TLAČÍTKO ---------- */
+        // TODO: Nahraď URL skutečnou adresou stažení
+        (function() {
+            var DOWNLOAD_URL = '#'; // <-- PRÁZDNÁ KOLONKA: Zde vlož URL stažení
+
+            var downloadBtn = document.getElementById('download-btn');
+            var heroDownloadBtn = document.getElementById('hero-download-btn');
+
+            function handleDownload(e) {
+                if (DOWNLOAD_URL === '#') {
+                    e.preventDefault();
+                    showToast('Stranka stahovani jeste neni dostupna.');
+                    return;
+                }
+                // Přesměrování na stránku stažení
+                window.location.href = DOWNLOAD_URL;
+            }
+
+            downloadBtn.addEventListener('click', handleDownload);
+            heroDownloadBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
+            });
+        })();
+
+        /* ---------- TRAILER TLAČÍTKO ---------- */
+        (function() {
+            var trailerBtn = document.getElementById('trailer-btn');
+            // TODO: Nahraď URL traileru
+            var TRAILER_URL = ''; // <-- PRÁZDNÁ KOLONKA: URL traileru (YouTube embed)
+
+            trailerBtn.addEventListener('click', function(e) {
+                if (!TRAILER_URL) {
+                    e.preventDefault();
+                    showToast('Trailer jeste nebyl vydán.');
+                    return;
+                }
+                window.open(TRAILER_URL, '_blank');
+            });
+        })();
+
+        /* ---------- TOAST NOTIFIKACE ---------- */
+        function showToast(message) {
+            var toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        /* ---------- NAVBAR — skrytí/odhalení při scrollu ---------- */
+        (function() {
+            var nav = document.querySelector('nav');
+            var lastScroll = 0;
+
+            window.addEventListener('scroll', function() {
+                var current = window.scrollY;
+                if (current > 100) {
+                    nav.style.background = 'rgba(10, 10, 15, 0.95)';
+                } else {
+                    nav.style.background = 'rgba(10, 10, 15, 0.8)';
+                }
+                lastScroll = current;
+            });
+        })();
+    </script>
+</body>
+</html>
